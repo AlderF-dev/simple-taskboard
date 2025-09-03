@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// css
+import "./App.css";
+import "rsuite/dist/rsuite.min.css";
+
+// Imports
+import * as React from "react";
+import ReactDOM from "react-dom";
+import { TaskProvider } from "./contexts/TaskContext";
+import Dashboard from "./Pages/Dashboard";
+import {
+  Container,
+  Header,
+  Content,
+  Navbar,
+  Nav,
+  CustomProvider,
+} from "rsuite";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <CustomProvider>
+      <TaskProvider>
+        <Container>
+          <Header>
+            <Navbar appearance="inverse">
+              <Navbar.Brand>Task Board</Navbar.Brand>
+              <Nav pullRight>
+                <Nav.Item>Settings</Nav.Item>
+              </Nav>
+            </Navbar>
+          </Header>
+          <Content>
+            <Dashboard />
+          </Content>
+        </Container>
+      </TaskProvider>
+    </CustomProvider>
+  );
 }
 
-export default App
+export default App;
