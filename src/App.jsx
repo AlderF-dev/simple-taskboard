@@ -4,9 +4,7 @@ import "rsuite/dist/rsuite.min.css";
 
 // Imports
 import * as React from "react";
-import ReactDOM from "react-dom";
 import { TaskProvider } from "./contexts/TaskContext";
-import Dashboard from "./Pages/Dashboard";
 import {
   Container,
   Header,
@@ -14,25 +12,42 @@ import {
   Navbar,
   Nav,
   CustomProvider,
+  IconButton,
+  SelectPicker,
 } from "rsuite";
+import NiceModal from "@ebay/nice-modal-react";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
+  const [theme, setTheme] = React.useState("light");
   return (
-    <CustomProvider>
+    <CustomProvider theme={theme}>
       <TaskProvider>
-        <Container>
-          <Header>
-            <Navbar appearance="inverse">
-              <Navbar.Brand>Task Board</Navbar.Brand>
-              <Nav pullRight>
-                <Nav.Item>Settings</Nav.Item>
-              </Nav>
-            </Navbar>
-          </Header>
-          <Content>
-            <Dashboard />
-          </Content>
-        </Container>
+        <NiceModal.Provider>
+          <Container>
+            <Header>
+              <Navbar appearance="inverse">
+                <Navbar.Brand>Task Board</Navbar.Brand>
+                <Nav pullRight>
+                  <SelectPicker
+                    searchable={false}
+                    cleanable={false}
+                    value={theme}
+                    onSelect={(e) => setTheme(e)}
+                    data={[
+                      { label: "Light Mode", value: "light" },
+                      { label: "Dark", value: "dark" },
+                      { label: "High Contrast", value: "high-contrast" },
+                    ]}
+                  />
+                </Nav>
+              </Navbar>
+            </Header>
+            <Content>
+              <Dashboard />
+            </Content>
+          </Container>
+        </NiceModal.Provider>
       </TaskProvider>
     </CustomProvider>
   );

@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
-import { Container, FlexboxGrid, Button, Heading } from "rsuite";
+import { useState } from "react";
+import { Container, Button, Text } from "rsuite";
 import AddTaskFormModal from "../Components/Modals/AddTaskFormModal";
 import { useTaskContext } from "../contexts/TaskContext";
 import TaskColumn from "../Components/TaskColumn/TaskColumn";
-import TaskColumnItem from "../Components/TaskColumn/TaskColumnItem";
+import SearchInput from "../Components/Inputs/SearchInput";
+import TagPicker from "../Components/Inputs/TagPicker";
 
 const Dashboard = () => {
   const { tasks } = useTaskContext();
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState([]);
+
+  // const { filtered, setSearchQuery, setFilters } = useTaskFilter(tasks);
 
   return (
     <Container>
@@ -26,6 +31,13 @@ const Dashboard = () => {
           Add Task
         </Button>
 
+        <SearchInput setSearch={(e) => setSearchQuery(e)} />
+
+        <Container style={{ marginBottom: 16 }}>
+          <Text>Filters</Text>
+          <TagPicker onSelect={(e) => setFilters(e)} />
+        </Container>
+
         <Container
           style={{
             display: "flex",
@@ -34,21 +46,18 @@ const Dashboard = () => {
             ".rs-container": { width: "50%" },
           }}
         >
-          <TaskColumn title="Pending">
-            {tasks
-              .filter((task) => !task.completed)
-              .map((task) => (
-                <TaskColumnItem key={task.id} data={task} />
-              ))}
-          </TaskColumn>
-
-          <TaskColumn title="Success">
-            {tasks
-              .filter((task) => task.completed)
-              .map((task) => (
-                <TaskColumnItem key={task.id} data={task} />
-              ))}
-          </TaskColumn>
+          <TaskColumn
+            type="pending"
+            tasks={tasks}
+            searchQuery={searchQuery}
+            filters={filters}
+          />
+          <TaskColumn
+            type="completed"
+            tasks={tasks}
+            searchQuery={searchQuery}
+            filters={filters}
+          />
         </Container>
       </Container>
 

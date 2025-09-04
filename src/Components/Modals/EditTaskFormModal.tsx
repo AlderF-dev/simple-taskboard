@@ -3,35 +3,17 @@ import { useTaskContext } from "../../contexts/TaskContext";
 import { useDispatchToast } from "../../Hooks/useDispatchToast";
 import React from "react";
 import TagPicker from "../Inputs/TagPicker";
+import NiceModal, { useModal } from "@ebay/nice-modal-react";
 
-function AddTaskFormModal({
-  open,
-  handleClose,
-}: {
-  open: boolean;
-  handleClose: () => void;
-}) {
-  const { handleAddTask } = useTaskContext();
-  const dispatchToast = useDispatchToast();
+const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
+  const { handleChangeTask } = useTaskContext();
+  const modal = useModal();
 
-  const handleSubmit = (newTask: {
-    name: string;
-    description: string;
-    tags: Array<string>;
-  }) => {
-    try {
-      // Add task to context
-      handleAddTask(newTask);
+  const [formValue, setFormValue] = React.useState(data);
 
-      // Fire Toast
-      dispatchToast("success", "Successfully created task");
-
-      // Close Modal
-      handleClose();
-    } catch {
-      // Fire Toast
-      dispatchToast("error", "Something went wrong! Try again!");
-    }
+  const handleSubmit = (newData) => {
+    handleChangeTask(newData);
+    modal.hide();
   };
 
   const Textarea = React.forwardRef((props, ref) => (
@@ -49,11 +31,20 @@ function AddTaskFormModal({
   ));
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal
+      open={modal.visible}
+      onClose={modal.hide}
+      onExited={modal.remove}
+      backdrop="static"
+    >
       <Modal.Header>
-        <Modal.Title>Add Task</Modal.Title>
+        <Modal.Title>Edit Task</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleSubmit}>
+      <Form
+        onSubmit={handleSubmit}
+        formValue={formValue}
+        onChange={(formValue) => setFormValue(formValue)}
+      >
         <Modal.Body>
           <Form.Group>
             <Form.ControlLabel>Name</Form.ControlLabel>
@@ -72,14 +63,14 @@ function AddTaskFormModal({
         <Modal.Footer
           style={{ justifyContent: "space-between", display: "flex" }}
         >
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={modal.hide}>Cancel</Button>
           <Button type="submit" appearance="primary">
-            Create
+            Save
           </Button>
         </Modal.Footer>
       </Form>
     </Modal>
   );
-}
+});
 
-export default AddTaskFormModal;
+export default EditTaskFormModal;

@@ -1,12 +1,16 @@
-import { Card, Text, Stack, Dropdown, Heading, IconButton } from "rsuite";
-import MoreIcon from "@rsuite/icons/More";
+import { Card, Text, Stack, IconButton, Tag, TagGroup } from "rsuite";
 import CheckOutlineIcon from "@rsuite/icons/CheckOutline";
 import CheckRoundIcon from "@rsuite/icons/CheckRound";
 import { useTaskContext } from "../../contexts/TaskContext";
 import MinusRoundIcon from "@rsuite/icons/MinusRound";
-import { useDispatchToast } from "../../Hooks/useDispatchToast";
+import EditRoundIcon from "@rsuite/icons/EditRound";
+import WarningRoundIcon from "@rsuite/icons/WarningRound";
+import CustomTooltip from "../Tooltip";
+import DeleteTaskModal from "../Modals/DeleteTaskModal";
+import NiceModal from "@ebay/nice-modal-react";
+import EditTaskFormModal from "../Modals/EditTaskFormModal";
 
-const TaskColumnItem = ({ data }) => {
+const TaskColumnItem = ({ data }: { data: taskData }) => {
   const { handleChangeTask } = useTaskContext();
 
   const updateTaskCompleted = (state) => {
@@ -15,7 +19,7 @@ const TaskColumnItem = ({ data }) => {
       completed: state,
     });
   };
-
+  // #3b6a3b
   return (
     <Card style={data.completed && { background: "#e4ffe4" }}>
       <Card.Header
@@ -29,29 +33,64 @@ const TaskColumnItem = ({ data }) => {
 
         <Stack style={{ gap: 8 }}>
           {data.completed ? (
-            <IconButton
-              color="red"
-              appearance="primary"
-              icon={<MinusRoundIcon />}
-              size="sm"
-              onClick={() => updateTaskCompleted(false)}
-            />
+            <CustomTooltip placement="top" message="Mark as uncomplete">
+              <IconButton
+                color="red"
+                appearance="primary"
+                icon={<MinusRoundIcon />}
+                size="sm"
+                onClick={() => updateTaskCompleted(false)}
+              />
+            </CustomTooltip>
           ) : (
-            <IconButton
-              color="green"
-              appearance="primary"
-              icon={<CheckRoundIcon />}
-              size="sm"
-              onClick={() => updateTaskCompleted(true)}
-            />
+            <CustomTooltip placement="top" message="Mark as complete">
+              <IconButton
+                color="green"
+                appearance="primary"
+                icon={<CheckRoundIcon />}
+                size="sm"
+                onClick={() => updateTaskCompleted(true)}
+              />
+            </CustomTooltip>
           )}
-          <IconButton icon={<MoreIcon />} size="sm" />
+          <CustomTooltip placement="top" message="Edit">
+            <IconButton
+              appearance="primary"
+              icon={<EditRoundIcon />}
+              size="sm"
+              onClick={() => NiceModal.show(EditTaskFormModal, { data: data })}
+            />
+          </CustomTooltip>
+          <CustomTooltip placement="top" message="Delete">
+            <IconButton
+              appearance="primary"
+              color="red"
+              icon={<WarningRoundIcon />}
+              size="sm"
+              onClick={() =>
+                NiceModal.show(DeleteTaskModal, { taskId: data.id })
+              }
+            />
+          </CustomTooltip>
         </Stack>
       </Card.Header>
       <Card.Body>
         <Text style={data.completed && { textDecoration: "line-through" }}>
           {data?.description}
         </Text>
+
+        {data?.tags && (
+          <TagGroup style={{ marginTop: 4 }}>
+            {data.tags.map((tag, index) => (
+              <Tag
+                key={index}
+                style={{ background: data.completed ? "#CBFFDB" : "" }}
+              >
+                {tag}
+              </Tag>
+            ))}
+          </TagGroup>
+        )}
       </Card.Body>
       <Card.Footer>
         <Text muted>Created at: {data.created_at}</Text>

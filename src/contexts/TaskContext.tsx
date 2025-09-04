@@ -17,7 +17,7 @@ const TaskContext = createContext<TaskContextType>({
   handleDeleteTask: (taskId: string) => {},
 });
 
-const tasksReducer = (tasks, action) => {
+const tasksReducer = (tasks: Array<taskData>, action: Object) => {
   if (action.type === "CREATE") {
     const dateNow = new Date().toLocaleString();
 
@@ -46,10 +46,7 @@ const tasksReducer = (tasks, action) => {
 };
 
 export const TaskProvider = ({ children }) => {
-  const [value, setValue, removeValue] = useLocalStorage(
-    "task-context-key",
-    []
-  );
+  const [value, setValue] = useLocalStorage("task-context-key", []);
 
   const [state, dispatch] = useReducer(tasksReducer, value);
   const dispatchToast = useDispatchToast();
@@ -58,7 +55,11 @@ export const TaskProvider = ({ children }) => {
     setValue(state);
   }, [state]);
 
-  const handleAddTask = (task) => {
+  const handleAddTask = (task: {
+    name: string;
+    description: string;
+    tags: Array<string>;
+  }) => {
     dispatch({
       type: "CREATE",
       id: uuidv4(),
@@ -66,7 +67,7 @@ export const TaskProvider = ({ children }) => {
     });
   };
 
-  const handleChangeTask = (task) => {
+  const handleChangeTask = (task: taskData) => {
     try {
       dispatch({
         type: "UPDATE",
@@ -79,11 +80,17 @@ export const TaskProvider = ({ children }) => {
     }
   };
 
-  const handleDeleteTask = (taskId) => {
-    dispatch({
-      type: "DELETE",
-      id: taskId,
-    });
+  const handleDeleteTask = (taskId: string) => {
+    try {
+      dispatch({
+        type: "DELETE",
+        id: taskId,
+      });
+
+      dispatchToast("success", "Task deleted!");
+    } catch {
+      dispatchToast("error", "Failed to delete Task.");
+    }
   };
 
   const context = {
