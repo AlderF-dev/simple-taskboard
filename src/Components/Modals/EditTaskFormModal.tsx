@@ -4,15 +4,15 @@ import { useDispatchToast } from "../../Hooks/useDispatchToast";
 import React from "react";
 import TagPicker from "../Inputs/TagPicker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
 const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
-  const { handleChangeTask } = useTaskContext();
   const modal = useModal();
-
   const [formValue, setFormValue] = React.useState(data);
+  const updateTask = useUpdateTask();
 
   const handleSubmit = (newData) => {
-    handleChangeTask(newData);
+    updateTask.mutate(newData);
     modal.hide();
   };
 

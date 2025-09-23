@@ -3,6 +3,7 @@ import { useTaskContext } from "../../contexts/TaskContext";
 import { useDispatchToast } from "../../Hooks/useDispatchToast";
 import React from "react";
 import TagPicker from "../Inputs/TagPicker";
+import { useCreateTask } from "../../Hooks/Tasks/useCreateTask";
 
 function AddTaskFormModal({
   open,
@@ -11,32 +12,23 @@ function AddTaskFormModal({
   open: boolean;
   handleClose: () => void;
 }) {
-  const { handleAddTask } = useTaskContext();
-  const dispatchToast = useDispatchToast();
+  const createTask = useCreateTask();
 
   const handleSubmit = (newTask: {
     name: string;
     description: string;
     tags: Array<string>;
   }) => {
-    try {
-      // Add task to context
-      handleAddTask(newTask);
+    createTask.mutate(newTask);
 
-      // Fire Toast
-      dispatchToast("success", "Successfully created task");
-
-      // Close Modal
-      handleClose();
-    } catch {
-      // Fire Toast
-      dispatchToast("error", "Something went wrong! Try again!");
-    }
+    // Close Modal
+    handleClose();
   };
 
   const Textarea = React.forwardRef((props, ref) => (
     <Input {...props} as="textarea" ref={ref} />
   ));
+
   const tagPicker = React.forwardRef((props, ref) => (
     <TagPicker
       creatable
@@ -56,9 +48,9 @@ function AddTaskFormModal({
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
           <Form.Group>
-            <Form.ControlLabel>Name</Form.ControlLabel>
-            <Form.Control name="name" required />
-            <Form.HelpText>Name is required</Form.HelpText>
+            <Form.ControlLabel>Title</Form.ControlLabel>
+            <Form.Control name="title" required />
+            <Form.HelpText>Title is required</Form.HelpText>
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Description</Form.ControlLabel>
@@ -70,7 +62,10 @@ function AddTaskFormModal({
           </Form.Group>
         </Modal.Body>
         <Modal.Footer
-          style={{ justifyContent: "space-between", display: "flex" }}
+          style={{
+            justifyContent: "space-between",
+            display: "flex",
+          }}
         >
           <Button onClick={handleClose}>Cancel</Button>
           <Button type="submit" appearance="primary">

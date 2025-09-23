@@ -1,13 +1,14 @@
 import { Button, Modal, Form, Input, Text } from "rsuite";
 import { useTaskContext } from "../../contexts/TaskContext";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
+import { useDeleteTask } from "../../Hooks/Tasks/useDeleteTask";
 
 const DeleteTaskModal = NiceModal.create(({ taskId }: { taskId: string }) => {
   const modal = useModal();
-  const { handleDeleteTask } = useTaskContext();
+  const deleteTask = useDeleteTask();
 
   const handleDelete = () => {
-    handleDeleteTask(taskId);
+    deleteTask.mutate(taskId);
     modal.hide();
   };
 

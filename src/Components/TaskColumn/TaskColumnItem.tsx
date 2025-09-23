@@ -19,7 +19,7 @@ const TaskColumnItem = ({ data }: { data: taskData }) => {
       completed: state,
     });
   };
-  // #3b6a3b
+
   return (
     <Card style={data.completed && { background: "#e4ffe4" }}>
       <Card.Header
@@ -28,7 +28,7 @@ const TaskColumnItem = ({ data }: { data: taskData }) => {
       >
         <Stack style={{ gap: 8 }}>
           {data.completed && <CheckOutlineIcon color="green" />}
-          {data.name}
+          {data.title}
         </Stack>
 
         <Stack style={{ gap: 8 }}>

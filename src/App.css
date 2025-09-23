@@ -11,3 +11,21 @@ main {
 .rs-modal-footer:after, .rs-modal-footer:before {
   content: unset !important;
 }
+
+.rs-navbar:after, .rs-navbar:before {
+  content: unset !important;
+}
+
+.rs-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rs-navbar .rs-navbar-right {
+  margin-right: 16px;
+}
+
+#theme-picker { 
+  width: 135px;
+}

@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatchToast } from "../Hooks/useDispatchToast";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { BaseFetch } from "../Helpers/BaseFetch";
 
 interface TaskContextType {
   tasks: Record<string, any>; // or a more specific type
@@ -55,6 +57,8 @@ export const TaskProvider = ({ children }) => {
     setValue(state);
   }, [state]);
 
+  const getTasks = () => {};
+
   const handleAddTask = (task: {
     name: string;
     description: string;
@@ -64,6 +68,13 @@ export const TaskProvider = ({ children }) => {
       type: "CREATE",
       id: uuidv4(),
       task: task,
+    });
+  };
+
+  const useCreateTask = (task) => {
+    return BaseFetch("api/tasks", {
+      method: "POST",
+      body: JSON.stringify(task),
     });
   };
 
@@ -95,7 +106,7 @@ export const TaskProvider = ({ children }) => {
 
   const context = {
     tasks: state,
-    handleAddTask: handleAddTask,
+    useCreateTask: useCreateTask,
     handleChangeTask: handleChangeTask,
     handleDeleteTask: handleDeleteTask,
   };
