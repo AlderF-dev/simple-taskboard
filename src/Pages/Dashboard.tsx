@@ -32,24 +32,22 @@ const Dashboard = () => {
         >
           Add Task
         </Button>
-        <Button
+
+        <Container
           style={{
-            width: "max-content",
-            marginTop: 12,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
             marginBottom: 12,
-            alignSelf: "end",
           }}
-          appearance="primary"
-          onClick={() => queryClient.refetchQueries({ queryKey: ["tasks"] })}
         >
-          Add Task
-        </Button>
+          <SearchInput setSearch={(e) => setSearchQuery(e)} />
 
-        <SearchInput setSearch={(e) => setSearchQuery(e)} />
-
-        <Container style={{ marginBottom: 16 }}>
-          <Text>Filters</Text>
-          <TagPicker onSelect={(e) => setFilters(e)} />
+          <Container style={{ flexGrow: 0 }}>
+            <Text>Filters</Text>
+            <TagPicker onSelect={(e) => setFilters(e)} />
+          </Container>
         </Container>
 
         {isPending ? (

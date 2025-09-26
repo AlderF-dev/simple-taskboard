@@ -11,13 +11,13 @@ function SearchInput({ setSearch }: { setSearch: (value: string) => void }) {
       style={{
         flexDirection: "row",
         display: "flex",
-        alignItems: "center",
+        alignItems: "end",
         gap: 12,
       }}
     >
-      <Form.Group>
-        <Form.ControlLabel>Name</Form.ControlLabel>
-        <Form.Control name="name" />
+      <Form.Group style={{ marginBottom: 0 }}>
+        <Form.ControlLabel>Title</Form.ControlLabel>
+        <Form.Control name="title" />
       </Form.Group>
       <Button
         type="submit"

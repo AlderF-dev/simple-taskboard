@@ -12,12 +12,12 @@ const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
   const updateTask = useUpdateTask();
 
   const handleSubmit = (newData) => {
-    updateTask.mutate(newData);
+    updateTask.mutate({ id: data.id, task: newData });
     modal.hide();
   };
 
   const Textarea = React.forwardRef((props, ref) => (
-    <Input {...props} as="textarea" ref={ref} />
+    <Input {...props} as="textarea" ref={ref} rows={5} />
   ));
   const tagPicker = React.forwardRef((props, ref) => (
     <TagPicker
@@ -47,13 +47,17 @@ const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
       >
         <Modal.Body>
           <Form.Group>
-            <Form.ControlLabel>Name</Form.ControlLabel>
-            <Form.Control name="name" required />
+            <Form.ControlLabel>Title</Form.ControlLabel>
+            <Form.Control name="title" required />
             <Form.HelpText>Name is required</Form.HelpText>
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Form.Control name="description" rows={5} accepter={Textarea} />
+            <Form.Control
+              key={"textarea"}
+              name="description"
+              accepter={Textarea}
+            />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Tags</Form.ControlLabel>

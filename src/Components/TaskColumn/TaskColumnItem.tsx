@@ -9,15 +9,14 @@ import CustomTooltip from "../Tooltip";
 import DeleteTaskModal from "../Modals/DeleteTaskModal";
 import NiceModal from "@ebay/nice-modal-react";
 import EditTaskFormModal from "../Modals/EditTaskFormModal";
+import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
 const TaskColumnItem = ({ data }: { data: taskData }) => {
   const { handleChangeTask } = useTaskContext();
+  const updateTask = useUpdateTask();
 
   const updateTaskCompleted = (state) => {
-    handleChangeTask({
-      ...data,
-      completed: state,
-    });
+    updateTask.mutate({ id: data.id, task: { completed: state } });
   };
 
   return (

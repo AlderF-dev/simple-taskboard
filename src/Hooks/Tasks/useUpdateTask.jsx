@@ -6,10 +6,10 @@ export const useUpdateTask = () => {
   const queryClient = useQueryClient();
   const dispatchToast = useDispatchToast();
 
-  const updateTask = (task) => {
-    return BaseFetch("/tasks", {
+  const updateTask = (data) => {
+    return BaseFetch(`/tasks/${data.id}`, {
       method: "PUT",
-      body: JSON.stringify(task),
+      body: JSON.stringify(data.task),
     });
   };
 
