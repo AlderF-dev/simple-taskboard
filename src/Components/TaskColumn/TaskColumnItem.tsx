@@ -12,12 +12,13 @@ import EditTaskFormModal from "../Modals/EditTaskFormModal";
 import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
 const TaskColumnItem = ({ data }: { data: taskData }) => {
-  const { handleChangeTask } = useTaskContext();
-  const updateTask = useUpdateTask();
+  const { mutate, isPending } = useUpdateTask();
 
   const updateTaskCompleted = (state) => {
-    updateTask.mutate({ id: data.id, task: { completed: state } });
+    mutate({ id: data.id, task: { completed: state } });
   };
+
+  console.log(data);
 
   return (
     <Card style={data.completed && { background: "#e4ffe4" }}>
@@ -39,6 +40,7 @@ const TaskColumnItem = ({ data }: { data: taskData }) => {
                 icon={<MinusRoundIcon />}
                 size="sm"
                 onClick={() => updateTaskCompleted(false)}
+                loading={isPending}
               />
             </CustomTooltip>
           ) : (
@@ -48,6 +50,7 @@ const TaskColumnItem = ({ data }: { data: taskData }) => {
                 appearance="primary"
                 icon={<CheckRoundIcon />}
                 size="sm"
+                loading={isPending}
                 onClick={() => updateTaskCompleted(true)}
               />
             </CustomTooltip>

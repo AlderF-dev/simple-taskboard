@@ -1,6 +1,4 @@
 import { Button, Modal, Form, Input } from "rsuite";
-import { useTaskContext } from "../../contexts/TaskContext";
-import { useDispatchToast } from "../../Hooks/useDispatchToast";
 import React from "react";
 import TagPicker from "../Inputs/TagPicker";
 import { useCreateTask } from "../../Hooks/Tasks/useCreateTask";
@@ -12,16 +10,15 @@ function AddTaskFormModal({
   open: boolean;
   handleClose: () => void;
 }) {
-  const createTask = useCreateTask();
+  const { mutate, isPending, isSuccess } = useCreateTask();
 
   const handleSubmit = (newTask: {
     name: string;
     description: string;
     tags: Array<string>;
   }) => {
-    createTask.mutate(newTask);
+    mutate(newTask);
 
-    // Close Modal
     handleClose();
   };
 
@@ -67,8 +64,10 @@ function AddTaskFormModal({
             display: "flex",
           }}
         >
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit" appearance="primary">
+          <Button onClick={handleClose} disabled={isPending}>
+            Cancel
+          </Button>
+          <Button type="submit" appearance="primary" loading={isPending}>
             Create
           </Button>
         </Modal.Footer>

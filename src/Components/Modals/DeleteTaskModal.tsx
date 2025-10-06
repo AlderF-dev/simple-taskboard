@@ -1,24 +1,19 @@
-import { Button, Modal, Form, Input, Text } from "rsuite";
-import { useTaskContext } from "../../contexts/TaskContext";
+import { Button, Modal, Text } from "rsuite";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { useDeleteTask } from "../../Hooks/Tasks/useDeleteTask";
 
 const DeleteTaskModal = NiceModal.create(({ taskId }: { taskId: string }) => {
-  const modal = useModal();
-  const deleteTask = useDeleteTask();
+  const { visible, hide, remove } = useModal();
+  const { mutate, isPending, isSuccess } = useDeleteTask();
 
   const handleDelete = () => {
-    deleteTask.mutate(taskId);
-    modal.hide();
+    mutate(taskId);
+
+    hide();
   };
 
   return (
-    <Modal
-      open={modal.visible}
-      onClose={modal.hide}
-      onExited={modal.remove}
-      backdrop="static"
-    >
+    <Modal open={visible} onClose={hide} onExited={remove} backdrop="static">
       <Modal.Header>
         <Modal.Title>Delete Task</Modal.Title>
       </Modal.Header>
@@ -28,8 +23,13 @@ const DeleteTaskModal = NiceModal.create(({ taskId }: { taskId: string }) => {
       <Modal.Footer
         style={{ justifyContent: "space-between", display: "flex" }}
       >
-        <Button onClick={modal.hide}>Cancel</Button>
-        <Button appearance="primary" color="red" onClick={handleDelete}>
+        <Button onClick={hide}>Cancel</Button>
+        <Button
+          appearance="primary"
+          color="red"
+          onClick={handleDelete}
+          loading={isPending}
+        >
           Delete
         </Button>
       </Modal.Footer>
