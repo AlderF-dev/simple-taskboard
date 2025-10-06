@@ -36,6 +36,7 @@ This project demonstrates scalable frontend architecture, clean component design
 
 - **Framework**: React (Vite)
 - **Language**: TypeScript
+- **Runtime**: Node.js 18+
 - **Styling**: TailwindCSS + RSuite UI components
 - **Data Fetching**: React Query
 - **Build Tool**: Vite
@@ -43,6 +44,10 @@ This project demonstrates scalable frontend architecture, clean component design
 ---
 
 ## Getting Started
+
+### 0. Prerequisites
+
+Make sure you have **Node.js 18+** and **npm (or yarn)** installed.
 
 ### 1. Clone the repo
 
