@@ -56,6 +56,7 @@ function AddTaskFormModal({
           <Form.Group>
             <Form.ControlLabel>Tags</Form.ControlLabel>
             <Form.Control name="tags" accepter={tagPicker} />
+            <Form.HelpText>Tags are case-sensitive</Form.HelpText>
           </Form.Group>
         </Modal.Body>
         <Modal.Footer

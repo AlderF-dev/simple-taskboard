@@ -1,7 +1,6 @@
 import { Card, Text, Stack, IconButton, Tag, TagGroup } from "rsuite";
 import CheckOutlineIcon from "@rsuite/icons/CheckOutline";
 import CheckRoundIcon from "@rsuite/icons/CheckRound";
-import { useTaskContext } from "../../contexts/TaskContext";
 import MinusRoundIcon from "@rsuite/icons/MinusRound";
 import EditRoundIcon from "@rsuite/icons/EditRound";
 import WarningRoundIcon from "@rsuite/icons/WarningRound";
@@ -11,14 +10,12 @@ import NiceModal from "@ebay/nice-modal-react";
 import EditTaskFormModal from "../Modals/EditTaskFormModal";
 import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
-const TaskColumnItem = ({ data }: { data: taskData }) => {
+const TaskColumnItem = ({ data }: { data: TaskData }) => {
   const { mutate, isPending } = useUpdateTask();
 
   const updateTaskCompleted = (state) => {
     mutate({ id: data.id, task: { completed: state } });
   };
-
-  console.log(data);
 
   return (
     <Card style={data.completed && { background: "#e4ffe4" }}>
@@ -81,16 +78,18 @@ const TaskColumnItem = ({ data }: { data: taskData }) => {
           {data?.description}
         </Text>
 
-        {data?.tags && (
+        {data?.tags && data.tags.length > 0 && (
           <TagGroup style={{ marginTop: 4 }}>
-            {data.tags.map((tag, index) => (
-              <Tag
-                key={index}
-                style={{ background: data.completed ? "#CBFFDB" : "" }}
-              >
-                {tag}
-              </Tag>
-            ))}
+            {Object.entries(data.tags).map(([index, item]) => {
+              return (
+                <Tag
+                  key={item.id}
+                  style={{ background: data.completed ? "#CBFFDB" : "" }}
+                >
+                  {item.label}
+                </Tag>
+              );
+            })}
           </TagGroup>
         )}
       </Card.Body>

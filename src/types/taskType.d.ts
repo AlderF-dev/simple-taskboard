@@ -1,10 +1,15 @@
-type taskData = {
+type TaskData = {
   id: string;
-  name: string;
+  title: string;
   description: string;
   created_at: string;
   completed: boolean;
-  tags: Array<string>;
+  tags: Array<Tag>;
 };
 
-type taskStatus = "pending" | "completed";
+type Tag = {
+  id: string;
+  label: string;
+};
+
+type TaskStatus = "pending" | "completed";

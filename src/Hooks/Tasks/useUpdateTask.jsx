@@ -17,6 +17,7 @@ export const useUpdateTask = () => {
     mutationFn: updateTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
       dispatchToast("success", "Task updated!");
     },
     onError: () => {

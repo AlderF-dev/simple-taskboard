@@ -19,7 +19,7 @@ const TaskContext = createContext<TaskContextType>({
   handleDeleteTask: (taskId: string) => {},
 });
 
-const tasksReducer = (tasks: Array<taskData>, action: Object) => {
+const tasksReducer = (tasks: Array<TaskData>, action: Object) => {
   if (action.type === "CREATE") {
     const dateNow = new Date().toLocaleString();
 
@@ -78,7 +78,7 @@ export const TaskProvider = ({ children }) => {
     });
   };
 
-  const handleChangeTask = (task: taskData) => {
+  const handleChangeTask = (task: TaskData) => {
     try {
       dispatch({
         type: "UPDATE",

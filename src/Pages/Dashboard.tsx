@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import { Container, Button, Text, Loader } from "rsuite";
 import AddTaskFormModal from "../Components/Modals/AddTaskFormModal";
-import { useTaskContext } from "../contexts/TaskContext";
 import TaskColumn from "../Components/TaskColumn/TaskColumn";
 import SearchInput from "../Components/Inputs/SearchInput";
 import TagPicker from "../Components/Inputs/TagPicker";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useGetTask } from "../Hooks/Tasks/useGetTask";
 
 const Dashboard = () => {
-  const { tasks } = useTaskContext();
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState([]);
   const { data, isPending } = useGetTask();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
 
   return (
     <Container>
@@ -42,12 +44,11 @@ const Dashboard = () => {
             marginBottom: 12,
           }}
         >
-          <SearchInput setSearch={(e) => setSearchQuery(e)} />
-
           <Container style={{ flexGrow: 0 }}>
-            <Text>Filters</Text>
-            <TagPicker onSelect={(e) => setFilters(e)} />
+            <Text style={{ marginBottom: 4 }}>Filters</Text>
+            <TagPicker value={filters} onChange={setFilters} />
           </Container>
+          <SearchInput setSearch={(e) => setSearchQuery(e)} />
         </Container>
 
         {isPending ? (

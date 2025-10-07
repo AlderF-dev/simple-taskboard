@@ -8,8 +8,8 @@ const TaskColumn = ({
   searchQuery,
   filters,
 }: {
-  type: taskStatus;
-  tasks: Array<taskData>;
+  type: TaskStatus;
+  tasks: Array<TaskData>;
   searchQuery: string;
   filters: Array<string>;
 }) => {

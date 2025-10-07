@@ -1,15 +1,23 @@
 import { Button, Modal, Form, Input } from "rsuite";
 import { useTaskContext } from "../../contexts/TaskContext";
 import { useDispatchToast } from "../../Hooks/useDispatchToast";
-import React from "react";
+import React, { useEffect } from "react";
 import TagPicker from "../Inputs/TagPicker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
-const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
+const EditTaskFormModal = NiceModal.create(({ data }: { data: TaskData }) => {
   const modal = useModal();
   const [formValue, setFormValue] = React.useState(data);
   const updateTask = useUpdateTask();
+
+  useEffect(() => {
+    const tagArray = formValue.tags.map((item) => {
+      return item.label;
+    });
+
+    setFormValue({ ...formValue, tags: tagArray });
+  }, []);
 
   const handleSubmit = (newData) => {
     updateTask.mutate({ id: data.id, task: newData });
@@ -19,10 +27,12 @@ const EditTaskFormModal = NiceModal.create(({ data }: { data: taskData }) => {
   const Textarea = React.forwardRef((props, ref) => (
     <Input {...props} as="textarea" ref={ref} rows={5} />
   ));
+
   const tagPicker = React.forwardRef((props, ref) => (
     <TagPicker
       creatable
       required
+      value={formValue.tags}
       {...props}
       style={{ width: 300 }}
       menuStyle={{ width: 300 }}
