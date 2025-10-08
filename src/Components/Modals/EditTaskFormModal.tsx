@@ -6,39 +6,29 @@ import TagPicker from "../Inputs/TagPicker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { useUpdateTask } from "../../Hooks/Tasks/useUpdateTask";
 
+const Textarea = React.memo(
+  React.forwardRef((props, ref) => <Input {...props} as="textarea" ref={ref} />)
+);
+const tagPicker = React.forwardRef((props, ref) => (
+  <TagPicker
+    creatable
+    required
+    {...props}
+    style={{ width: 300 }}
+    menuStyle={{ width: 300 }}
+    ref={ref}
+  />
+));
+
 const EditTaskFormModal = NiceModal.create(({ data }: { data: TaskData }) => {
   const modal = useModal();
   const [formValue, setFormValue] = React.useState(data);
   const updateTask = useUpdateTask();
 
-  useEffect(() => {
-    const tagArray = formValue.tags.map((item) => {
-      return item.label;
-    });
-
-    setFormValue({ ...formValue, tags: tagArray });
-  }, []);
-
   const handleSubmit = (newData) => {
     updateTask.mutate({ id: data.id, task: newData });
     modal.hide();
   };
-
-  const Textarea = React.forwardRef((props, ref) => (
-    <Input {...props} as="textarea" ref={ref} rows={5} />
-  ));
-
-  const tagPicker = React.forwardRef((props, ref) => (
-    <TagPicker
-      creatable
-      required
-      value={formValue.tags}
-      {...props}
-      style={{ width: 300 }}
-      menuStyle={{ width: 300 }}
-      ref={ref}
-    />
-  ));
 
   return (
     <Modal
@@ -53,7 +43,7 @@ const EditTaskFormModal = NiceModal.create(({ data }: { data: TaskData }) => {
       <Form
         onSubmit={handleSubmit}
         formValue={formValue}
-        onChange={(formValue) => setFormValue(formValue)}
+        onChange={(value) => setFormValue((prev) => ({ ...prev, ...value }))}
       >
         <Modal.Body>
           <Form.Group>
@@ -63,11 +53,7 @@ const EditTaskFormModal = NiceModal.create(({ data }: { data: TaskData }) => {
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Description</Form.ControlLabel>
-            <Form.Control
-              key={"textarea"}
-              name="description"
-              accepter={Textarea}
-            />
+            <Form.Control name="description" accepter={Textarea} rows={5} />
           </Form.Group>
           <Form.Group>
             <Form.ControlLabel>Tags</Form.ControlLabel>

@@ -2,7 +2,7 @@ import { Button, Form } from "rsuite";
 
 function SearchInput({ setSearch }: { setSearch: (value: string) => void }) {
   const handleSubmit = (value) => {
-    setSearch(value.name.toLocaleLowerCase());
+    setSearch(value.title.toLocaleLowerCase());
   };
 
   return (

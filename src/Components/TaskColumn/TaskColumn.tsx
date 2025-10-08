@@ -18,15 +18,15 @@ const TaskColumn = ({
       const matchesCompleted =
         type === "completed" ? task.completed : !task.completed;
 
-      // const matchesSearch = task.name
-      //   .toLowerCase()
-      //   .includes(searchQuery.toLowerCase());
+      const matchesSearch = task.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
 
-      // const matchesTags =
-      //   !filters.length ||
-      //   (task?.tags && [task.tags].flat().some((tag) => filters.includes(tag)));
+      const matchesTags =
+        !filters.length ||
+        (task?.tags && [task.tags].flat().some((tag) => filters.includes(tag)));
 
-      return matchesCompleted;
+      return matchesCompleted && matchesSearch && matchesTags;
     });
   };
 

@@ -1,15 +1,17 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { BaseFetch } from "../../Helpers/BaseFetch";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const useGetTags = () => {
   const queryClient = useQueryClient();
+  const { fetchWithToken } = useAuth();
 
   const fetchTags = async () => {
-    const res = await BaseFetch("/tags", { method: "GET" });
+    const res = await fetchWithToken("/tags", { method: "GET" });
     // Transform the API response into the format rsuite expects
     return res.data.map((tag: any) => ({
       label: tag.label,
-      value: tag.id, // use name as the unique value if IDs aren't needed
+      value: tag.label,
     }));
   };
 
@@ -28,8 +30,6 @@ export const useGetTags = () => {
         (t) => t.label && t.label.toLowerCase() === label.toLowerCase()
       );
       if (exists) return old;
-
-      console.log([...old, { label, value: label }]);
 
       return [...old, { label, value: label }];
     });

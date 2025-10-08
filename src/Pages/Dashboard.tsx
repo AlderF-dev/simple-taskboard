@@ -1,22 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, Button, Text, Loader } from "rsuite";
 import AddTaskFormModal from "../Components/Modals/AddTaskFormModal";
 import TaskColumn from "../Components/TaskColumn/TaskColumn";
 import SearchInput from "../Components/Inputs/SearchInput";
 import TagPicker from "../Components/Inputs/TagPicker";
-import { useQueryClient } from "@tanstack/react-query";
 import { useGetTask } from "../Hooks/Tasks/useGetTask";
 
 const Dashboard = () => {
-  const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState([]);
+  const [open, setOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filters, setFilters] = useState<Array<string>>([]);
   const { data, isPending } = useGetTask();
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    console.log(filters);
-  }, [filters]);
 
   return (
     <Container>

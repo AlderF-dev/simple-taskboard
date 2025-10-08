@@ -1,6 +1,11 @@
 import { Container, Tooltip, Whisper } from "rsuite";
 
-const CustomTooltip = ({ message, children, ...rest }) => {
+type CustomTooltipType = {
+  message: string;
+  children: any;
+};
+
+const CustomTooltip = ({ message, children, ...rest }: CustomTooltipType) => {
   return (
     <Container>
       <Whisper speaker={<Tooltip>{message}</Tooltip>} {...rest}>

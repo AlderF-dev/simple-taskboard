@@ -83,10 +83,10 @@ const TaskColumnItem = ({ data }: { data: TaskData }) => {
             {Object.entries(data.tags).map(([index, item]) => {
               return (
                 <Tag
-                  key={item.id}
+                  key={index}
                   style={{ background: data.completed ? "#CBFFDB" : "" }}
                 >
-                  {item.label}
+                  {item}
                 </Tag>
               );
             })}
