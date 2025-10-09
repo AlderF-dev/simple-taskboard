@@ -22,6 +22,12 @@ interface AuthContextType {
   loading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ) => Promise<void>;
   logout: () => void;
   fetchWithToken: (url: string, options: RequestInit) => Promise<void>;
 }
@@ -100,6 +106,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const register = async (
+    name: string,
+    email: string,
+    password: string,
+    passwordConfirmation: string
+  ) => {
+    try {
+      const data = await BaseFetch<{ user: User; token: string }>(
+        "/auth/register",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+            password_confirmation: passwordConfirmation,
+          }),
+        }
+      );
+
+      localStorage.setItem("token", data.token);
+      setToken(data.token);
+      setUser(data.user);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Registration failed:", err);
+      throw err;
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
@@ -113,6 +149,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     loading,
     isAuthenticated: !!user,
     login,
+    register,
     logout,
     fetchWithToken,
   };

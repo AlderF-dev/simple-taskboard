@@ -1,18 +1,19 @@
 import { Container, Divider, VStack, Heading } from "rsuite";
 import TaskColumnItem from "./TaskColumnItem";
 import EmptyState from "./EmptyState";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
-const TaskColumn = ({
-  type = "pending",
-  tasks,
-  searchQuery,
-  filters,
-}: {
-  type: TaskStatus;
+interface TaskColumnProps {
+  type: "pending" | "completed";
   tasks: Array<TaskData>;
   searchQuery: string;
   filters: Array<string>;
-}) => {
+}
+
+const TaskColumn = ({ type, tasks, searchQuery, filters }: TaskColumnProps) => {
   const matchingData = () => {
     return tasks.filter((task) => {
       const matchesCompleted =
@@ -30,21 +31,31 @@ const TaskColumn = ({
     });
   };
 
+  const filteredTasks = matchingData();
+
   return (
     <Container style={{ width: "50%" }}>
       <Heading>{type === "pending" ? "Pending" : "Completed"}</Heading>
       <Divider />
-      <VStack>
-        {matchingData().length > 0 ? (
-          <>
-            {matchingData().map((task) => (
-              <TaskColumnItem key={task.id} data={task} />
-            ))}
-          </>
-        ) : (
-          <EmptyState />
-        )}
-      </VStack>
+
+      <SortableContext
+        items={filteredTasks.map((task) => `${type}:${task.id}`)}
+        strategy={verticalListSortingStrategy}
+      >
+        <VStack>
+          {filteredTasks.length > 0 ? (
+            filteredTasks.map((task) => (
+              <TaskColumnItem
+                key={task.id}
+                id={`${type}:${task.id}`}
+                data={task}
+              />
+            ))
+          ) : (
+            <EmptyState />
+          )}
+        </VStack>
+      </SortableContext>
     </Container>
   );
 };

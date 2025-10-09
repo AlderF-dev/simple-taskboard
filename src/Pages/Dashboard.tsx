@@ -5,6 +5,7 @@ import TaskColumn from "../Components/TaskColumn/TaskColumn";
 import SearchInput from "../Components/Inputs/SearchInput";
 import TagPicker from "../Components/Inputs/TagPicker";
 import { useGetTask } from "../Hooks/Tasks/useGetTask";
+import TaskBoard from "../Components/TaskColumn/TaskBoard";
 
 const Dashboard = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -50,27 +51,11 @@ const Dashboard = () => {
         ) : (
           <>
             {data ? (
-              <Container
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 16,
-                  ".rs-container": { width: "50%" },
-                }}
-              >
-                <TaskColumn
-                  type="pending"
-                  tasks={data.data}
-                  searchQuery={searchQuery}
-                  filters={filters}
-                />
-                <TaskColumn
-                  type="completed"
-                  tasks={data.data}
-                  searchQuery={searchQuery}
-                  filters={filters}
-                />
-              </Container>
+              <TaskBoard
+                data={data.data}
+                searchQuery={searchQuery}
+                filters={filters}
+              />
             ) : (
               <Text style={{ margin: "auto" }}>No Data</Text>
             )}

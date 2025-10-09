@@ -26,6 +26,9 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import LogoutButton from "./Components/Auth/LogoutButton";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import RedirectRoot from "./Components/Auth/RedirectRoot";
+import Register from "./Pages/Auth/Register";
+import { DndContext } from "@dnd-kit/core";
+import { SortableContext } from "@dnd-kit/sortable";
 
 function App() {
   const [theme, setTheme] = React.useState("light");
@@ -53,7 +56,10 @@ function App() {
                         data={[
                           { label: "Light Mode", value: "light" },
                           { label: "Dark", value: "dark" },
-                          { label: "High Contrast", value: "high-contrast" },
+                          {
+                            label: "High Contrast",
+                            value: "high-contrast",
+                          },
                         ]}
                       />
                       <LogoutButton />
@@ -66,7 +72,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<RedirectRoot />} />
                     <Route path="/login" element={<Login />} />
-                    {/* <Route path="/register" element={<Register />} /> */}
+                    <Route path="/register" element={<Register />} />
 
                     <Route element={<ProtectedRoute />}>
                       <Route path="/dashboard" element={<Dashboard />} />

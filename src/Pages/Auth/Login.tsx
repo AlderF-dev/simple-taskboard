@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Container, Button, Text, Loader, Form, Card, Heading } from "rsuite";
 import PasswordInput from "../../Components/Inputs/PasswordInput";
 import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = (credentials) => {
     login(credentials.email, credentials.password);
@@ -34,10 +36,12 @@ const Login = () => {
           <Card.Footer
             style={{ justifyContent: "center", flexDirection: "column" }}
           >
-            <Button appearance="primary" type="submit">
+            <Button appearance="primary" type="submit" loading={loading}>
               Login
             </Button>
-            <Button type="submit">Register</Button>
+            <Button onClick={() => navigate("/register")} disabled={loading}>
+              Register
+            </Button>
           </Card.Footer>
         </Form>
       </Card>
